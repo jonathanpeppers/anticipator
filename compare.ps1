@@ -7,6 +7,7 @@ param
     [string] $package = 'com.xamarin.anticipatortest',
     [string] $activity = 'com.xamarin.anticipatortest.MainActivity',
     [string] $configuration = 'Debug',
+    [int] $sleep = 3, # you might need to increase this for slower apps
     [bool] $anticipator = $true,
     [int] $iterations = 10
 )
@@ -28,7 +29,7 @@ for ($i = 0; $i -le $iterations; $i++)
     Write-Host "Launching: $package $activity"
     & $adb shell am force-stop $package
     & $msbuild $project /v:minimal /nologo /t:_Run /p:Configuration=$configuration /p:DefineConstants=$define
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds $sleep
 }
 
 $log = & $adb logcat -d | Select-String GREPME
