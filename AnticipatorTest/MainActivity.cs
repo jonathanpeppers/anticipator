@@ -10,9 +10,9 @@ namespace AnticipatorTest
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        readonly Stopwatch stopwatch = new Stopwatch();
+        static readonly Stopwatch stopwatch = new Stopwatch();
 
-        public MainActivity()
+        static MainActivity()
         {
             stopwatch.Start();
         }
