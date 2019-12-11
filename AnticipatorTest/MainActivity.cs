@@ -1,13 +1,14 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Runtime;
+using Android.Support.V7.App;
+using Android.Util;
 using Android.Widget;
 using System.Diagnostics;
 
 namespace AnticipatorTest
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Register("com.xamarin.anticipatortest.MainActivity"), Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
         static readonly Stopwatch stopwatch = new Stopwatch();
@@ -15,6 +16,10 @@ namespace AnticipatorTest
         static MainActivity()
         {
             stopwatch.Start();
+
+#if ANTICIPATOR
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(Anticipator).TypeHandle);
+#endif
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -29,6 +34,8 @@ namespace AnticipatorTest
             var text = $"SdkInt: {Build.VERSION.SdkInt}\n";
             stopwatch.Stop();
             textView.Text = $"{text}{stopwatch.ElapsedMilliseconds}ms";
+
+            Log.Debug("GREPME", stopwatch.ElapsedMilliseconds.ToString());
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
