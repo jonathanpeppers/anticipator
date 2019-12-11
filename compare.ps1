@@ -21,7 +21,7 @@ if ($anticipator)
 # We need a huge logcat buffer
 & $adb logcat -G 15M
 & $adb logcat -c
-& $msbuild $project /r /v:minimal /nologo /t:Install /p:Configuration=$configuration /p:DefineConstants=$define
+& $msbuild $project /r /v:minimal /nologo /t:Clean,Install /p:Configuration=$configuration /p:DefineConstants=$define
 
 for ($i = 0; $i -le $iterations; $i++)
 {
