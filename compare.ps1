@@ -7,6 +7,7 @@ param
     [string] $package = 'com.xamarin.anticipatortest',
     [string] $activity = 'com.xamarin.anticipatortest.MainActivity',
     [string] $configuration = 'Debug',
+    [string] $extra = '', # /p:AotAssemblies=True, for example
     [int] $sleep = 3, # you might need to increase this for slower apps
     [bool] $anticipator = $true,
     [int] $iterations = 10
@@ -22,13 +23,13 @@ if ($anticipator)
 # We need a huge logcat buffer
 & $adb logcat -G 15M
 & $adb logcat -c
-& $msbuild $project /r /v:minimal /nologo /t:Clean,Install /p:Configuration=$configuration /p:DefineConstants=$define
+& $msbuild $project /r /v:minimal /nologo /t:Clean,Install /p:Configuration=$configuration /p:DefineConstants=$define $extra
 
 for ($i = 0; $i -le $iterations; $i++)
 {
     Write-Host "Launching: $package $activity"
     & $adb shell am force-stop $package
-    & $msbuild $project /v:minimal /nologo /t:_Run /p:Configuration=$configuration /p:DefineConstants=$define
+    & $msbuild $project /v:minimal /nologo /t:_Run /p:Configuration=$configuration /p:DefineConstants=$define $extra
     Start-Sleep -Seconds $sleep
 }
 
